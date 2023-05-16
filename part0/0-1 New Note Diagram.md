@@ -3,12 +3,14 @@ sequenceDiagram
     participant browser
     participant server
 
-    note left of server: push new note to notes
+    
 
     browser->>server: POST req.body.note
     activate server
     server-->>browser: Redirect /notes
     deactivate server
+
+    note left of server: push new note to notes
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
     activate server
@@ -24,4 +26,4 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
-``` 
+```
