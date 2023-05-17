@@ -1,3 +1,4 @@
+SPA Diagram
 ```mermaid
 sequenceDiagram
     participant browser
