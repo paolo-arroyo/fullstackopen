@@ -4,7 +4,7 @@ sequenceDiagram
     participant browser
     participant server
 
-    browser: Process Form Data (create new note, add to notes, re-render notes on page)
+    Note right of browser: Process Form Data (create new note, add to notes, re-render notes on page)
 
     browser->>server: POST JSON data to https://studies.cs.helsinki.fi/exampleapp/new_note_spa
     activate server
