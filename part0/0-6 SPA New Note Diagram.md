@@ -4,10 +4,12 @@ sequenceDiagram
     participant browser
     participant server
 
-    browser->>server: POST req.body.note
+    browser: Process Form Data (create new note, add to notes, re-render notes on page)
+
+    browser->>server: POST JSON data to https://studies.cs.helsinki.fi/exampleapp/new_note_spa
     activate server
-    note left of server: Server pushes new note to notes
-    server-->>browser: Redirect /notes
+    note left of server: Server prevents default handling (no redirect)
+    server-->>browser: Status Code 201 Created
     deactivate server
 
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
