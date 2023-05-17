@@ -1,4 +1,4 @@
-New Note Diagram
+SPA New Note Diagram
 ```mermaid
 sequenceDiagram
     participant browser
