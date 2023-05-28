@@ -27,6 +27,7 @@ const Statistics = ({data}) => {
   }
 }
 
+//Just adding a comment so I can commit and push exercise 1.9; no changes necessary
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
