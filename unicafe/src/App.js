@@ -2,19 +2,28 @@ import { useState } from 'react'
 
 const Heading = ({text}) => (<h1> {text} </h1>)
 const Button = ({handler, text}) => (<button onClick={handler}> {text} </button>)
-const Statistic = ({rating, label, unit}) => (<p> {label}: {rating} {unit} </p>)
+const Statistic = ({rating, label, unit}) => (
+  <tr>
+    <td> {label} </td>
+    <td> {rating} {unit} </td>
+  </tr>
+)
 const Statistics = ({data}) => {
   let all = data[3].rating
   if (all != 0) {
     return (
       <div>
         <Heading text="Statistics" />
-        <Statistic label={data[0].label} rating={data[0].rating} unit={data[0].unit} />
-        <Statistic label={data[1].label} rating={data[1].rating} unit={data[1].unit} />
-        <Statistic label={data[2].label} rating={data[2].rating} unit={data[2].unit} />
-        <Statistic label={data[3].label} rating={data[3].rating} unit={data[3].unit} />
-        <Statistic label={data[4].label} rating={data[4].rating} unit={data[4].unit} />
-        <Statistic label={data[5].label} rating={data[5].rating*100} unit={data[5].unit} />
+        <table>
+          <tbody>
+            <Statistic label={data[0].label} rating={data[0].rating} unit={data[0].unit} />
+            <Statistic label={data[1].label} rating={data[1].rating} unit={data[1].unit} />
+            <Statistic label={data[2].label} rating={data[2].rating} unit={data[2].unit} />
+            <Statistic label={data[3].label} rating={data[3].rating} unit={data[3].unit} />
+            <Statistic label={data[4].label} rating={data[4].rating} unit={data[4].unit} />
+            <Statistic label={data[5].label} rating={data[5].rating} unit={data[5].unit} />
+          </tbody>
+        </table>
       </div>
     )
   } else {
@@ -46,8 +55,8 @@ const App = () => {
     {label: "Positive", rating: pos, unit: "%"}
   ]
 
-  const getAvg = (good,bad,all) => (good-bad)/all
-  const getPos = (good, all) => (good/all)
+  const getAvg = (good,bad,all) => ((good-bad)/all).toFixed(2)
+  const getPos = (good, all) => (good/all*100).toFixed(2)
   const handleGood = () => {
     const newGood = good+1
     setGood(newGood)
