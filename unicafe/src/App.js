@@ -3,6 +3,20 @@ import { useState } from 'react'
 const Heading = ({text}) => (<h1> {text} </h1>)
 const Button = ({handler, text}) => (<button onClick={handler}> {text} </button>)
 const Statistic = ({rating, label, unit}) => (<p> {label}: {rating} {unit} </p>)
+const Statistics = ({data}) => {
+  return (
+    <div>
+      <Heading text="Statistics" />
+      <Statistic label={data[0].label} rating={data[0].rating} unit={data[0].unit} />
+      <Statistic label={data[1].label} rating={data[1].rating} unit={data[1].unit} />
+      <Statistic label={data[2].label} rating={data[2].rating} unit={data[2].unit} />
+      <Statistic label={data[3].label} rating={data[3].rating} unit={data[3].unit} />
+      <Statistic label={data[4].label} rating={data[4].rating} unit={data[4].unit} />
+      <Statistic label={data[5].label} rating={data[5].rating} unit={data[5].unit} />
+    </div>
+  )
+}
+
 const App = () => {
   // save clicks of each button to its own state
   const [good, setGood] = useState(0)
@@ -11,6 +25,15 @@ const App = () => {
   const [all, setAll] = useState(0)
   const [avg, setAvg] = useState(0)
   const [pos, setPos] = useState(0)
+
+  const ratings=[
+    {label: "Good", rating: good},
+    {label: "Neutral", rating: neutral},
+    {label: "Bad", rating: bad},
+    {label: "All", rating: all},
+    {label: "Average", rating: avg},
+    {label: "Positive", rating: pos, unit: "%"}
+  ]
 
   const getAvg = (good,bad,all) => (good-bad)/all
   const getPos = (good, all) => (good/all)
@@ -51,13 +74,7 @@ const App = () => {
       <Button handler={handleGood} text="Good" />
       <Button handler={handleNeutral} text="Neutral" />
       <Button handler={handleBad} text="Bad" />
-      <Heading text="Statistics" />
-      <Statistic label="Good" rating={good} />
-      <Statistic label="Neutral" rating={neutral} />
-      <Statistic label="Bad" rating={bad} />
-      <Statistic label="All" rating={all} />
-      <Statistic label="Average" rating={avg} />
-      <Statistic label="Positive" rating={pos*100} unit="%" />
+      <Statistics data={ratings} />
     </div>
   )
 }
