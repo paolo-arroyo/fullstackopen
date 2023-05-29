@@ -1,6 +1,26 @@
 import { useState } from 'react'
 
-const Phonebook = ({contacts}) => contacts.map(contact => <div key={contact.name}> {contact.name} {contact.number} </div>)
+const Phonebook = ({contacts}) => contacts.map(contact => <Contact key={contact.name} contact={contact} />)
+const Contact = ({contact}) => <div> {contact.name} {contact.number} </div>
+const Heading = ({text}) => <h1>{text}</h1>
+const Filter = ({value,handler}) => (
+  <>
+    Filter Shown by <input value={value} onChange={handler} />
+  </>
+) 
+const ContactForm = ({valName, valNumber, handleName, handleNumber, handleAdd}) => (
+  <form>
+    <div>
+      Name: <input value={valName} onChange={handleName}/>
+    </div>
+    <div>
+      Number: <input value={valNumber} onChange={handleNumber}/>
+    </div>
+    <div>
+      <button type="submit" onClick={handleAdd}>Add</button>
+    </div>
+  </form>
+)
 const App = () => {
   const [persons, setPersons] = useState([{ name: '', number: '' }]) 
   const [newName, setNewName] = useState('Input Name')
@@ -29,21 +49,17 @@ const App = () => {
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
   return (
     <div>
-      <h2>Phonebook</h2>
-      <input value={filter} onChange={handleFilter} />
-      <h2>Add New </h2>
-      <form>
-        <div>
-          Name: <input value={newName} onChange={handleNewName}/>
-        </div>
-        <div>
-          Number: <input value={newNumber} onChange={handleNewNumber}/>
-        </div>
-        <div>
-          <button type="submit" onClick={addPerson}>Add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
+      <Heading text="Phonebook" />
+      <Filter value={filter} handler={handleFilter} />
+      <Heading text="Add New" />
+      <ContactForm 
+        valName={newName}
+        valNumber={newNumber}
+        handleName={handleNewName}
+        handleNumber={handleNewNumber}
+        handleAdd={addPerson}
+      />
+      <Heading text="Numbers" />
       <Phonebook contacts={personsToShow} />
     </div>
   )
