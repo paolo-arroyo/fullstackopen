@@ -9,7 +9,8 @@ const App = () => {
   const addPerson = (e) => {
     e.preventDefault()
     const newPerson = {name: newName}
-    setPersons(persons.concat(newPerson))
+    const checkExisting = persons.some(person => person.name === newName)
+    checkExisting ? alert(`${newName} is already in the phonebook.`) : setPersons(persons.concat(newPerson))
     setNewName('')
   }
 
