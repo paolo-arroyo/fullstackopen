@@ -21,11 +21,6 @@
       "id": 4
     },
     {
-      "name": "Paolo Arroyo",
-      "number": "0906-272-6619",
-      "id": 5
-    },
-    {
       "name": "Mia Nicole",
       "number": "0905-462-9561",
       "id": 6
@@ -34,6 +29,11 @@
       "name": "Mila Raquid",
       "number": "0917-580-1024",
       "id": 7
+    },
+    {
+      "name": "Paolo Arroyo",
+      "number": "0906-272-6619",
+      "id": 8
     }
   ]
 }

@@ -82,6 +82,14 @@ const App = () => {
               setNotif(null)
             }, 5000)
           })
+          .catch(error => {
+            setNotif(`Information on '${updatedPerson.name} has already been deleted from server.`)
+            setNotifStyle(errorStyle)
+            setTimeout(() => {
+              setNotif(null)
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== updatedPerson.id))
+          })
       }
     } else {
       phoneService
