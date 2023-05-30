@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import phoneService from './services/phoneService'
 
-const Phonebook = ({contacts}) => contacts.map(contact => <Contact key={contact.name} contact={contact} />)
-const Contact = ({contact}) => <div> {contact.name} {contact.number} </div>
+const Phonebook = ({contacts, handleDelete}) => contacts.map(contact => <Contact key={contact.name} contact={contact} handleDelete={handleDelete} />)
+const Contact = ({contact, handleDelete}) => <div> {contact.name} {contact.number} <button onClick={() => handleDelete(contact.id)}>Delete</button> </div>
 const Heading = ({text}) => <h1>{text}</h1>
 const Filter = ({value,handler}) => (<> Filter Shown by <input value={value} onChange={handler} /></>) 
 const ContactForm = ({valName, valNumber, handleName, handleNumber, handleAdd}) => (
@@ -18,6 +18,7 @@ const ContactForm = ({valName, valNumber, handleName, handleNumber, handleAdd}) 
     </div>
   </form>
 )
+
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('Input Name')
@@ -32,6 +33,7 @@ const App = () => {
       })
   }
   useEffect(hook,[])
+
   const addPerson = (e) => {
     e.preventDefault()
     const newPerson = {name: newName, number: newNumber}
@@ -45,6 +47,13 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
+  }
+
+  const deletePerson = id => {
+    const person = persons.find(p => p.id === id)
+    if (window.confirm(`Delete ${person.name} from Phonebook?`)) phoneService.remove(id)
+    console.log(persons)
+    setPersons(persons.filter(p => p.id !== id))
   }
 
   const handleNewName = (e) => {
@@ -71,7 +80,7 @@ const App = () => {
         handleAdd={addPerson}
       />
       <Heading text="Numbers" />
-      <Phonebook contacts={personsToShow} />
+      <Phonebook contacts={personsToShow} handleDelete={deletePerson} />
     </div>
   )
 }
