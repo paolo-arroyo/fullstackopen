@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import phoneService from './services/phoneService'
 
-const Phonebook = ({contacts, handleDelete}) => contacts.map(contact => <Contact key={contact.name} contact={contact} handleDelete={handleDelete} />)
+const Phonebook = ({contacts, handleDelete}) => contacts.map(contact => <Contact key={contact.id} contact={contact} handleDelete={handleDelete} />)
 const Contact = ({contact, handleDelete}) => <div> {contact.name} {contact.number} <button onClick={() => handleDelete(contact.id)}>Delete</button> </div>
 const Heading = ({text}) => <h1>{text}</h1>
 const Filter = ({value,handler}) => (<> Filter Shown by <input value={value} onChange={handler} /></>) 
@@ -38,24 +38,33 @@ const App = () => {
     e.preventDefault()
     const newPerson = {name: newName, number: newNumber}
     const checkExisting = persons.some(person => person.name === newName)
-    checkExisting 
-      ? alert(`${newName} is already in the phonebook.`) 
-      : phoneService
+    if (checkExisting) {
+      const person = persons.find(p => p.name === newName)
+      const updatedPerson = {...person, number: newNumber}
+      if (window.confirm(`${person.name} is already in the Phonebook. Replace the old number with the new one?`)) {
+        phoneService
+          .update(person.id, updatedPerson)
+          .then(returned =>{
+            setPersons(persons.map(p => p.id !== person.id ? p : returned))
+          })
+      }
+      console.log(persons);
+    } else {
+      phoneService
         .create(newPerson)
         .then(response => {
           setPersons(persons.concat(newPerson))
           setNewName('')
           setNewNumber('')
         })
+    }
   }
 
   const deletePerson = id => {
     const person = persons.find(p => p.id === id)
     if (window.confirm(`Delete ${person.name} from Phonebook?`)) phoneService.remove(id)
-    console.log(persons)
     setPersons(persons.filter(p => p.id !== id))
   }
-
   const handleNewName = (e) => {
     setNewName(e.target.value)
   }
