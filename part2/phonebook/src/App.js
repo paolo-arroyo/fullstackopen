@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const Phonebook = ({contacts}) => contacts.map(contact => <Contact key={contact.name} contact={contact} />)
 const Contact = ({contact}) => <div> {contact.name} {contact.number} </div>
@@ -22,11 +23,20 @@ const ContactForm = ({valName, valNumber, handleName, handleNumber, handleAdd}) 
   </form>
 )
 const App = () => {
-  const [persons, setPersons] = useState([{ name: '', number: '' }]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('Input Name')
   const [newNumber, setNewNumber] = useState('Input Number')
   const [filter, setFilter] = useState('')
 
+  const hook = () => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+      })
+  }
+
+  useEffect(hook,[])
   const addPerson = (e) => {
     e.preventDefault()
     const newPerson = {name: newName, number: newNumber}
