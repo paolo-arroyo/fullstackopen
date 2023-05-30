@@ -18,13 +18,43 @@ const ContactForm = ({valName, valNumber, handleName, handleNumber, handleAdd}) 
     </div>
   </form>
 )
+const Notification = ({message,style}) => {
+  if (message === null) return null
+
+  return (
+    <div style={style}>
+      {message}
+    </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('Input Name')
   const [newNumber, setNewNumber] = useState('Input Number')
   const [filter, setFilter] = useState('')
+  const [notif, setNotif] = useState(null)
+  const [notifStyle, setNotifStyle] = useState({})
 
+  const errorStyle = {
+    color: 'red',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  const successStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
   const hook = () => {
     phoneService
       .getAll()
@@ -46,14 +76,23 @@ const App = () => {
           .update(person.id, updatedPerson)
           .then(returned =>{
             setPersons(persons.map(p => p.id !== person.id ? p : returned))
+            setNotif(`${person.name} has been successfully changed.`)
+            setNotifStyle(successStyle)
+            setTimeout(() => {
+              setNotif(null)
+            }, 5000)
           })
       }
-      console.log(persons);
     } else {
       phoneService
         .create(newPerson)
-        .then(response => {
-          setPersons(persons.concat(newPerson))
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNotif(`${returnedPerson.name} has been successfully added.`)
+          setNotifStyle(successStyle)
+          setTimeout(() => {
+            setNotif(null)
+          }, 5000)
           setNewName('')
           setNewNumber('')
         })
@@ -78,6 +117,7 @@ const App = () => {
   const personsToShow = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
   return (
     <div>
+      <Notification message={notif} style={notifStyle} />
       <Heading text="Phonebook" />
       <Filter value={filter} handler={handleFilter} />
       <Heading text="Add New" />
