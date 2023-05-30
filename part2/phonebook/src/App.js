@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import phoneService from './services/phoneService'
 
 const Phonebook = ({contacts}) => contacts.map(contact => <Contact key={contact.name} contact={contact} />)
 const Contact = ({contact}) => <div> {contact.name} {contact.number} </div>
 const Heading = ({text}) => <h1>{text}</h1>
-const Filter = ({value,handler}) => (
-  <>
-    Filter Shown by <input value={value} onChange={handler} />
-  </>
-) 
+const Filter = ({value,handler}) => (<> Filter Shown by <input value={value} onChange={handler} /></>) 
 const ContactForm = ({valName, valNumber, handleName, handleNumber, handleAdd}) => (
   <form>
     <div>
@@ -29,21 +25,26 @@ const App = () => {
   const [filter, setFilter] = useState('')
 
   const hook = () => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
+    phoneService
+      .getAll()
+      .then(initial => {
+        setPersons(initial)
       })
   }
-
   useEffect(hook,[])
   const addPerson = (e) => {
     e.preventDefault()
     const newPerson = {name: newName, number: newNumber}
     const checkExisting = persons.some(person => person.name === newName)
-    checkExisting ? alert(`${newName} is already in the phonebook.`) : setPersons(persons.concat(newPerson))
-    setNewName('')
-    setNewNumber('')
+    checkExisting 
+      ? alert(`${newName} is already in the phonebook.`) 
+      : phoneService
+        .create(newPerson)
+        .then(response => {
+          setPersons(persons.concat(newPerson))
+          setNewName('')
+          setNewNumber('')
+        })
   }
 
   const handleNewName = (e) => {
